@@ -1,10 +1,9 @@
-const mongoose =require('mongoose');
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const jwt =require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 
-
-const userSchema =new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     fullname: {
         firstname: {
             type: String,
@@ -32,19 +31,21 @@ const userSchema =new mongoose.Schema({
     },
 })
 
-userSchema.method.generateAuthToken = function () {
-    const token =jwt.sign({ _id: this._id }, process.env.JWT_SECRET,{ expiresIn: '24'});
+
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     return token;
 }
 
-userSchema.method.comparePassword = async function (password) {
-    return await bcrypt.compare(password,this.password);
+userSchema.methods.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
 }
 
-userSchema.static.hashPassword =async function (password) {
-    return await bcrypt.hash(password,10);
+userSchema.statics.hashPassword = async function (password) {
+    return await bcrypt.hash(password, 10);
 }
 
-const userModel =mongoose.model('user',userSchema);
+const userModel = mongoose.model('user', userSchema);
 
-module.exports =userModel;
+
+module.exports = userModel;
