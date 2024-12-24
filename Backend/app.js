@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRoutes);
-app.use('/captainss',captainRoutes);
+app.use('/captains',captainRoutes);
 
 
 
